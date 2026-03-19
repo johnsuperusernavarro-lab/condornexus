@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CONDORNEXUS — Gestión inteligente de cuentas por cobrar para empresas ecuatorianas. Sin servidor, sin internet, sin mensualidades.">
+  <meta property="og:title" content="CONDORNEXUS — Cobra más rápido, sin perseguir a nadie">
+  <meta property="og:description" content="Organiza tu cartera, prioriza cobros y envía mensajes personalizados. 100% local, sin mensualidades.">
+  <title>CONDORNEXUS — Cobra más rápido, sin perseguir a nadie</title>
+  <style>
+    /* ═══════════════════════════════════════
+       VARIABLES — Rosé Pine Dawn, aplicada
+       de forma creativa a un sitio oscuro
+    ═══════════════════════════════════════ */
+    :root {
+      --pine:    #286983;
+      --pine-dk: #1a3d4f;
+      --pine-xd: #0d2d3a;
+      --love:    #b4637a;
+      --gold:    #ea9d34;
+      --foam:    #56949f;
+      --iris:    #907aa9;
+      --text:    #575279;
+      --muted:   #9893a5;
+      --bg:      #faf4ed;
+      --surf:    #fffaf3;
+      --ovr:     #f2e9e1;
+      --border:  #d6cec5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(13,45,58,0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 0 2rem; height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.3s;
+    }
+    .nav-brand { text-decoration: none; display: flex; align-items: baseline; gap: 1px; }
+    .nav-brand .c { color: rgba(255,255,255,0.95); font-size: 1.15rem; font-weight: 400; letter-spacing: 5px; }
+    .nav-brand .n { color: var(--gold); font-size: 1.15rem; font-weight: 800; letter-spacing: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+    .nav-links a:hover { color: white; }
+    .nav-cta {
+      background: var(--gold) !important; color: var(--pine-xd) !important;
+      font-weight: 700 !important; padding: 0.4rem 1.1rem; border-radius: 6px;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.8); margin: 5px 0; border-radius: 2px; transition: 0.3s; }
+
+    /* ═══════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(140deg, var(--pine-xd) 0%, #112e40 55%, #1f5470 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 9rem 2rem 6rem;
+      position: relative; overflow: hidden;
+    }
+    /* Orbes decorativos */
+    #hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 550px; height: 550px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(234,157,52,0.13) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -80px; left: -80px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(144,122,169,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 800px; position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(234,157,52,0.12); border: 1px solid rgba(234,157,52,0.28);
+      color: var(--gold); font-size: 0.78rem; font-weight: 700;
+      padding: 0.35rem 1rem; border-radius: 999px; margin-bottom: 1.75rem;
+      letter-spacing: 0.8px; text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 900; color: white; line-height: 1.1;
+      margin-bottom: 1.5rem; letter-spacing: -1px;
+    }
+    .hero-title em { color: var(--gold); font-style: normal; }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.68); max-width: 620px;
+      margin: 0 auto 2.75rem; line-height: 1.75;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* Botones globales */
+    .btn-gold {
+      background: var(--gold); color: var(--pine-xd);
+      font-weight: 800; font-size: 1rem;
+      padding: 0.9rem 2.1rem; border-radius: 9px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 4px 24px rgba(234,157,52,0.38);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(234,157,52,0.5); }
+    .btn-outline-white {
+      background: transparent; color: rgba(255,255,255,0.85);
+      font-weight: 600; font-size: 1rem;
+      padding: 0.9rem 2.1rem; border-radius: 9px;
+      text-decoration: none; border: 1.5px solid rgba(255,255,255,0.22);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .btn-outline-white:hover { border-color: rgba(255,255,255,0.55); color: white; }
+
+    /* Trust bar */
+    .trust-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 0 2.5rem; padding: 0.9rem 2rem;
+    }
+    .trust-item {
+      color: rgba(255,255,255,0.55); font-size: 0.78rem; font-weight: 500;
+      display: flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+    }
+    .trust-check { color: var(--gold); }
+
+    /* ═══════════════════════════════════════
+       LOGOS BAND (social proof / integrations)
+    ═══════════════════════════════════════ */
+    #band {
+      background: var(--pine-xd);
+      padding: 1.75rem 2rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    #band span { color: rgba(255,255,255,0.35); font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-right: 0.5rem; }
+    .compat-pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.65);
+      font-size: 0.82rem; font-weight: 600;
+      padding: 0.4rem 1rem; border-radius: 999px;
+    }
+
+    /* ═══════════════════════════════════════
+       SECCIONES BASE
+    ═══════════════════════════════════════ */
+    section { padding: 5.5rem 2rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--pine); margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+      font-weight: 800; color: var(--text); line-height: 1.2; margin-bottom: 1rem;
+    }
+    .section-sub { font-size: 1.05rem; color: var(--muted); max-width: 560px; line-height: 1.7; }
+    .section-sub a { color: var(--pine); }
+
+    /* ═══════════════════════════════════════
+       PROBLEMA
+    ═══════════════════════════════════════ */
+    #problema { background: var(--surf); }
+    .problema-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; margin-top: 3.5rem;
+    }
+    .pain-list { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .pain-list li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      font-size: 0.97rem; color: var(--text); line-height: 1.5;
+    }
+    .pain-x { color: var(--love); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; font-size: 1rem; }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .stat-card {
+      background: white; border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px; padding: 1.5rem 1.25rem;
+      transition: box-shadow 0.2s;
+    }
+    .stat-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .stat-number {
+      font-size: 2.4rem; font-weight: 900; color: var(--pine-dk);
+      line-height: 1; margin-bottom: 0.4rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+    /* ═══════════════════════════════════════
+       CÓMO FUNCIONA
+    ═══════════════════════════════════════ */
+    #como { background: var(--bg); }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; margin-top: 3.5rem; position: relative;
+    }
+    .steps-line {
+      position: absolute; top: 2.6rem; left: 16.5%; right: 16.5%;
+      height: 2px;
+      background: linear-gradient(to right, var(--pine) 0%, var(--gold) 100%);
+      z-index: 0;
+    }
+    .step { text-align: center; position: relative; z-index: 1; }
+    .step-circle {
+      width: 5.2rem; height: 5.2rem; border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.9rem; position: relative;
+    }
+    .step:nth-child(1) .step-circle { background: linear-gradient(135deg, var(--pine-dk), var(--foam)); }
+    .step:nth-child(2) .step-circle { background: linear-gradient(135deg, #6b4a14, var(--gold)); }
+    .step:nth-child(3) .step-circle { background: linear-gradient(135deg, #7a2a40, var(--love)); }
+    .step-num {
+      position: absolute; top: -4px; right: -4px;
+      width: 1.5rem; height: 1.5rem; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--border);
+      font-size: 0.65rem; font-weight: 800; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ═══════════════════════════════════════
+       CARACTERÍSTICAS (fondo oscuro)
+    ═══════════════════════════════════════ */
+    #features {
+      background: linear-gradient(170deg, var(--pine-xd) 0%, #122f40 100%);
+      position: relative; overflow: hidden;
+    }
+    #features::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(144,122,169,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #features .section-eyebrow { color: var(--gold); }
+    #features .section-title { color: white; }
+    #features .section-sub { color: rgba(255,255,255,0.55); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 1.75rem;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(234,157,52,0.25);
+      transform: translateY(-4px);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: 16px 16px 0 0;
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .fc-pine::before   { background: linear-gradient(to right, var(--pine), var(--foam)); }
+    .fc-gold::before   { background: linear-gradient(to right, var(--gold), #f0b94d); }
+    .fc-love::before   { background: linear-gradient(to right, var(--love), #c47a8f); }
+    .fc-iris::before   { background: linear-gradient(to right, var(--iris), #b09aca); }
+    .feature-ico { font-size: 2.1rem; margin-bottom: 1rem; display: block; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.855rem; color: rgba(255,255,255,0.52); line-height: 1.65; }
+    .feature-tag {
+      display: inline-block; margin-top: 0.85rem;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 4px;
+    }
+    .tag-pine { background: rgba(86,148,159,0.2); color: #7ecae0; }
+    .tag-gold { background: rgba(234,157,52,0.18); color: var(--gold); }
+    .tag-love { background: rgba(180,99,122,0.2); color: #d9a0af; }
+    .tag-iris { background: rgba(144,122,169,0.2); color: #c5b8e0; }
+
+    /* ═══════════════════════════════════════
+       PARA QUIÉN
+    ═══════════════════════════════════════ */
+    #quien { background: var(--ovr); }
+    .quien-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .quien-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 14px; padding: 2rem 1.5rem; text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .quien-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-3px); }
+    .quien-ico { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .quien-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .quien-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+    /* ═══════════════════════════════════════
+       PRECIOS
+    ═══════════════════════════════════════ */
+    #precios { background: var(--surf); }
+    .pricing-wrap { max-width: 760px; margin: 3rem auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .price-card {
+      background: white; border: 1.5px solid var(--border);
+      border-radius: 18px; padding: 2.25rem; position: relative; overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .price-card.featured {
+      border-color: var(--pine);
+      box-shadow: 0 8px 48px rgba(40,105,131,0.16);
+    }
+    .price-badge-label {
+      position: absolute; top: 1.1rem; right: 1.1rem;
+      background: var(--gold); color: var(--pine-xd);
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      padding: 0.22rem 0.7rem; border-radius: 999px;
+    }
+    .price-name { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--pine); margin-bottom: 0.6rem; }
+    .price-amount { font-size: 3rem; font-weight: 900; color: var(--pine-dk); line-height: 1; margin-bottom: 0.3rem; }
+    .price-amount sub { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .price-note { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.75rem; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 2rem; }
+    .price-features li { font-size: 0.9rem; color: var(--text); display: flex; align-items: flex-start; gap: 0.55rem; }
+    .price-check { color: var(--pine); font-weight: 700; flex-shrink: 0; }
+    .btn-price {
+      display: block; width: 100%; padding: 0.9rem; border-radius: 9px;
+      font-weight: 700; font-size: 0.95rem; text-align: center;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-price-outline {
+      background: transparent; color: var(--pine); border: 1.5px solid var(--pine);
+    }
+    .btn-price-outline:hover { background: var(--pine); color: white; }
+    .btn-price-solid {
+      background: var(--pine); color: white; border: 1.5px solid var(--pine);
+    }
+    .btn-price-solid:hover {
+      background: var(--pine-dk); border-color: var(--pine-dk);
+      transform: translateY(-1px); box-shadow: 0 4px 18px rgba(40,105,131,0.3);
+    }
+
+    /* ═══════════════════════════════════════
+       CTA FINAL
+    ═══════════════════════════════════════ */
+    #cta {
+      background: linear-gradient(135deg, var(--pine-xd) 0%, #1f5470 100%);
+      text-align: center; padding: 7rem 2rem;
+      position: relative; overflow: hidden;
+    }
+    #cta::after {
+      content: '';
+      position: absolute; bottom: -60px; right: -60px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(234,157,52,0.1) 0%, transparent 70%);
+    }
+    #cta .section-eyebrow { color: var(--gold); }
+    #cta .section-title { color: white; }
+    #cta .section-sub { color: rgba(255,255,255,0.6); margin: 0 auto 2.75rem; }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    footer {
+      background: #060f14;
+      color: rgba(255,255,255,0.38);
+      text-align: center; padding: 2.25rem 2rem;
+      font-size: 0.82rem; line-height: 1.8;
+    }
+    .footer-brand { margin-bottom: 0.3rem; }
+    .footer-brand .c { color: rgba(255,255,255,0.75); font-weight: 400; letter-spacing: 4px; }
+    .footer-brand .n { color: var(--gold); font-weight: 800; }
+    footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ═══════════════════════════════════════
+       DESCARGA (sección destacada)
+    ═══════════════════════════════════════ */
+    #descarga { background: var(--bg); padding: 4rem 2rem; }
+    .download-box {
+      max-width: 680px; margin: 0 auto;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.07);
+      position: relative; overflow: hidden;
+    }
+    .download-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(to right, var(--pine), var(--gold));
+    }
+    .download-version {
+      display: inline-block;
+      background: var(--ovr); border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1.25rem;
+    }
+    .download-box h2 { font-size: 1.75rem; font-weight: 800; color: var(--pine-dk); margin-bottom: 0.5rem; }
+    .download-box p  { font-size: 0.95rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--pine); color: white;
+      font-size: 1.1rem; font-weight: 800;
+      padding: 1rem 2.5rem; border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(40,105,131,0.35);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .btn-download:hover {
+      background: var(--pine-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(40,105,131,0.45);
+    }
+    .download-meta {
+      display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .download-meta span {
+      font-size: 0.8rem; color: var(--muted);
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .download-meta .dm-check { color: var(--pine); font-weight: 700; }
+    .download-contact {
+      margin-top: 1.75rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem; color: var(--muted);
+    }
+    .download-contact a { color: var(--pine); text-decoration: none; font-weight: 600; }
+    .download-contact a:hover { text-decoration: underline; }
+
+    /* ═══════════════════════════════════════
+       WHATSAPP FLOTANTE
+    ═══════════════════════════════════════ */
+    .wa-btn {
+      position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 200;
+      background: #25d366; color: white; width: 58px; height: 58px;
+      border-radius: 50%; text-decoration: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.65rem;
+      box-shadow: 0 4px 22px rgba(37,211,102,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-btn:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(37,211,102,0.58); }
+
+    /* ═══════════════════════════════════════
+       ANIMACIÓN FADE-IN
+    ═══════════════════════════════════════ */
+    .fi { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fi.vis { opacity: 1; transform: translateY(0); }
+    .fi-d1 { transition-delay: 0.1s; }
+    .fi-d2 { transition-delay: 0.2s; }
+    .fi-d3 { transition-delay: 0.3s; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .quien-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 62px; left: 0; right: 0; background: rgba(13,45,58,0.98); padding: 1rem 2rem 1.5rem; gap: 1.25rem; }
+      .nav-links.open { display: flex; }
+      .nav-hamburger { display: block; }
+      .problema-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .steps { grid-template-columns: 1fr; }
+      .steps-line { display: none; }
+      .pricing-wrap { grid-template-columns: 1fr; max-width: 400px; }
+    }
+    @media (max-width: 540px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .quien-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .trust-bar { gap: 0.4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <span class="c">CONDOR</span><span class="n">NEXUS</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#features">Características</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#descarga">Descargar</a></li>
+    <li><a href="https://wa.me/593979398860" class="nav-cta" target="_blank" rel="noopener">Contactar →</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🦅 &nbsp; Hecho para Ecuador</div>
+    <h1 class="hero-title">
+      Cobra lo que te deben.<br>
+      <em>Sin perseguir a nadie.</em>
+    </h1>
+    <p class="hero-sub">
+      CONDORNEXUS organiza tu cartera, clasifica a tus clientes por riesgo
+      y genera los mensajes de cobro por ti — funciona en tu computadora,
+      sin internet, sin mensualidades.
+    </p>
+    <div class="hero-actions">
+      <a href="https://github.com/johnsuperusernavarro-lab/condornexus/releases/latest/download/CONDORNEXUS.zip" class="btn-gold">⬇&nbsp; Probar gratis 15 días</a>
+      <a href="#como" class="btn-outline-white">Ver cómo funciona →</a>
+    </div>
+  </div>
+  <div class="trust-bar">
+    <span class="trust-item"><span class="trust-check">✓</span> Sin servidor propio</span>
+    <span class="trust-item"><span class="trust-check">✓</span> Sin internet obligatorio</span>
+    <span class="trust-item"><span class="trust-check">✓</span> Sin mensualidades</span>
+    <span class="trust-item"><span class="trust-check">✓</span> Contifico · Alegra · Excel</span>
+    <span class="trust-item"><span class="trust-check">✓</span> Windows</span>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     BANDA DE COMPATIBILIDAD
+══════════════════════════════════════════════════ -->
+<div id="band">
+  <span>Compatible con</span>
+  <span class="compat-pill">🔗 Contifico API</span>
+  <span class="compat-pill">📊 Alegra XLS</span>
+  <span class="compat-pill">📋 Monica 11</span>
+  <span class="compat-pill">📁 Excel / CSV</span>
+  <span class="compat-pill">📄 RIDES PDF</span>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     EL PROBLEMA
+══════════════════════════════════════════════════ -->
+<section id="problema">
+  <div class="container">
+    <div class="problema-grid">
+      <div class="fi">
+        <p class="section-eyebrow">El problema</p>
+        <h2 class="section-title">Cada mes se van dólares que tus clientes no pagan</h2>
+        <p class="section-sub">
+          Tienes las facturas en un sistema contable o en un Excel.
+          Pero no sabes a quién llamar primero, qué decirle,
+          ni cuándo fue la última vez que lo contactaste.
+        </p>
+        <ul class="pain-list">
+          <li><span class="pain-x">✗</span> Pierdes horas revisando facturas una por una</li>
+          <li><span class="pain-x">✗</span> No tienes historial de cuándo llamaste a cada cliente</li>
+          <li><span class="pain-x">✗</span> Escribes mensajes genéricos que no dan resultado</li>
+          <li><span class="pain-x">✗</span> Los clientes más riesgosos pasan desapercibidos</li>
+          <li><span class="pain-x">✗</span> No sabes cuánto tienes vencido en total ahora mismo</li>
+        </ul>
+      </div>
+      <div class="stats-grid fi fi-d1">
+        <div class="stat-card">
+          <div class="stat-number" data-target="68" data-suffix="%">0%</div>
+          <div class="stat-label">de empresas no tiene un proceso formal de cobro</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="45" data-suffix="d">0d</div>
+          <div class="stat-label">promedio de retraso en pagos en PYMES</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="3" data-suffix="h">0h</div>
+          <div class="stat-label">semanales perdidas en gestión manual de cobros</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="30" data-suffix="%">0%</div>
+          <div class="stat-label">de deuda antigua nunca se recupera sin seguimiento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     CÓMO FUNCIONA
+══════════════════════════════════════════════════ -->
+<section id="como">
+  <div class="container">
+    <p class="section-eyebrow fi">Proceso</p>
+    <h2 class="section-title fi">Tres pasos y ya estás cobrando</h2>
+    <p class="section-sub fi">Sin instalaciones complicadas. En menos de 10 minutos enviás tu primer recordatorio.</p>
+    <div class="steps">
+      <div class="steps-line"></div>
+      <div class="step fi">
+        <div class="step-circle">📊<span class="step-num">1</span></div>
+        <h3>Carga tu cartera</h3>
+        <p>Importa el XLS de Contifico, Alegra, Monica o cualquier sistema. CONDORNEXUS detecta el formato automáticamente.</p>
+      </div>
+      <div class="step fi fi-d1">
+        <div class="step-circle">🎯<span class="step-num">2</span></div>
+        <h3>Ve a quién cobrar hoy</h3>
+        <p>El sistema clasifica a cada cliente por riesgo y arma la lista del día. Sabes exactamente con quién empezar.</p>
+      </div>
+      <div class="step fi fi-d2">
+        <div class="step-circle">📨<span class="step-num">3</span></div>
+        <h3>Enviá y registrá</h3>
+        <p>Envía el mensaje por email o WhatsApp con un clic. El historial completo de cada interacción queda guardado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     CARACTERÍSTICAS (fondo oscuro)
+══════════════════════════════════════════════════ -->
+<section id="features">
+  <div class="container">
+    <p class="section-eyebrow fi">Funcionalidades</p>
+    <h2 class="section-title fi">Todo lo que necesitás para gestionar tu cartera</h2>
+    <p class="section-sub fi">Diseñado específicamente para la realidad de las empresas ecuatorianas.</p>
+    <div class="features-grid">
+      <div class="feature-card fc-love fi">
+        <span class="feature-ico">📈</span>
+        <h3>Score de clientes</h3>
+        <p>Clasifica automáticamente cada cliente como confiable, medio o riesgoso según su comportamiento de pagos.</p>
+        <span class="feature-tag tag-love">Automático</span>
+      </div>
+      <div class="feature-card fc-gold fi fi-d1">
+        <span class="feature-ico">🎯</span>
+        <h3>Acciones del día</h3>
+        <p>Lista diaria priorizada. Sabes a quién llamar primero, con qué tono y qué decirle, sin perder tiempo.</p>
+        <span class="feature-tag tag-gold">Priorizado</span>
+      </div>
+      <div class="feature-card fc-pine fi fi-d2">
+        <span class="feature-ico">💬</span>
+        <h3>Mensajes inteligentes</h3>
+        <p>Plantillas para email y WhatsApp. El tono se ajusta automáticamente al perfil de riesgo del cliente.</p>
+        <span class="feature-tag tag-pine">Email + WhatsApp</span>
+      </div>
+      <div class="feature-card fc-iris fi">
+        <span class="feature-ico">🔄</span>
+        <h3>Multi-software</h3>
+        <p>Conecta con Contifico vía API o importa desde Alegra, Monica o cualquier sistema con exportación XLS.</p>
+        <span class="feature-tag tag-iris">Compatible</span>
+      </div>
+      <div class="feature-card fc-pine fi fi-d1">
+        <span class="feature-ico">💼</span>
+        <h3>Módulo de cotizaciones</h3>
+        <p>Crea y enviá cotizaciones profesionales. Convertílas en acciones de cobro cuando son aceptadas.</p>
+        <span class="feature-tag tag-pine">Incluido</span>
+      </div>
+      <div class="feature-card fc-gold fi fi-d2">
+        <span class="feature-ico">🔒</span>
+        <h3>100% local y privado</h3>
+        <p>Tus datos nunca salen de tu computadora. Sin servidores en la nube, sin riesgos de privacidad.</p>
+        <span class="feature-tag tag-gold">Sin internet</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     PARA QUIÉN
+══════════════════════════════════════════════════ -->
+<section id="quien">
+  <div class="container" style="text-align:center;">
+    <p class="section-eyebrow fi">Para quién es</p>
+    <h2 class="section-title fi">¿Reconocés tu empresa aquí?</h2>
+    <p class="section-sub fi" style="margin: 0 auto;">CONDORNEXUS funciona para cualquier empresa ecuatoriana que tenga facturas pendientes de cobro.</p>
+    <div class="quien-grid" style="margin-top:3rem;">
+      <div class="quien-card fi">
+        <span class="quien-ico">🏭</span>
+        <h3>PYMES y distribuidoras</h3>
+        <p>Vendes a crédito y tu cartera crece cada mes. Necesitás un sistema que te diga a quién cobrar sin que se te escape ninguno.</p>
+      </div>
+      <div class="quien-card fi fi-d1">
+        <span class="quien-ico">📋</span>
+        <h3>Contadores y administradores</h3>
+        <p>Manejás la cartera de una o varias empresas. CONDORNEXUS te da el control visual y el historial que necesitás.</p>
+      </div>
+      <div class="quien-card fi fi-d2">
+        <span class="quien-ico">🧾</span>
+        <h3>Profesionales independientes</h3>
+        <p>Emitís facturas por servicios y tus clientes se demoran en pagar. Automatizá los recordatorios sin perder la relación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     PRECIOS
+══════════════════════════════════════════════════ -->
+<section id="precios">
+  <div class="container" style="text-align:center;">
+    <p class="section-eyebrow fi">Precios</p>
+    <h2 class="section-title fi">Sin sorpresas. Sin mensualidades.</h2>
+    <p class="section-sub fi" style="margin:0 auto;">Probá gratis y, si te convence, pagás una sola vez.</p>
+    <div class="pricing-wrap">
+      <div class="price-card fi">
+        <p class="price-name">Trial gratuito</p>
+        <div class="price-amount">$0</div>
+        <p class="price-note">15 días completos · sin tarjeta</p>
+        <ul class="price-features">
+          <li><span class="price-check">✓</span> Acceso a todas las funciones</li>
+          <li><span class="price-check">✓</span> Sin límite de facturas</li>
+          <li><span class="price-check">✓</span> Soporte por WhatsApp</li>
+          <li><span class="price-check">✓</span> Sin tarjeta de crédito</li>
+        </ul>
+        <a href="https://github.com/johnsuperusernavarro-lab/condornexus/releases/latest/download/CONDORNEXUS.zip" class="btn-price btn-price-outline">Descargar gratis</a>
+      </div>
+      <div class="price-card featured fi fi-d1">
+        <span class="price-badge-label">Más popular</span>
+        <p class="price-name">Licencia perpetua</p>
+        <div class="price-amount"><sub>Consultar</sub></div>
+        <p class="price-note">Pago único · por máquina · sin límite de tiempo</p>
+        <ul class="price-features">
+          <li><span class="price-check">✓</span> Todo lo del trial, para siempre</li>
+          <li><span class="price-check">✓</span> Actualizaciones incluidas</li>
+          <li><span class="price-check">✓</span> Sin mensualidades nunca</li>
+          <li><span class="price-check">✓</span> Soporte personalizado</li>
+          <li><span class="price-check">✓</span> Activación inmediata</li>
+        </ul>
+        <a href="https://wa.me/593979398860?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20CONDORNEXUS" class="btn-price btn-price-solid" target="_blank" rel="noopener">Consultar precio →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     DESCARGA
+══════════════════════════════════════════════════ -->
+<section id="descarga">
+  <div class="container">
+    <div class="download-box fi">
+      <span class="download-version">Windows · Versión 3.0</span>
+      <h2>Descarga CONDORNEXUS</h2>
+      <p>Un solo archivo ZIP, sin instalador. Descomprimí y ejecutá.<br>15 días de prueba completos, sin tarjeta de crédito.</p>
+      <a href="https://github.com/johnsuperusernavarro-lab/condornexus/releases/latest/download/CONDORNEXUS.zip" class="btn-download">
+        ⬇&nbsp; Descargar gratis (ZIP)
+      </a>
+      <div class="download-meta">
+        <span><span class="dm-check">✓</span> Sin instalador</span>
+        <span><span class="dm-check">✓</span> Funciona 100% offline</span>
+        <span><span class="dm-check">✓</span> 15 días trial completo</span>
+        <span><span class="dm-check">✓</span> Sin tarjeta de crédito</span>
+      </div>
+      <div class="download-contact">
+        ¿Preguntas? Escríbele directamente a John Navarro:<br>
+        <a href="https://wa.me/593979398860?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20CONDORNEXUS" target="_blank" rel="noopener">💬 WhatsApp +593 97 939 8860</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:johnsuperusernavarro@gmail.com">✉ johnsuperusernavarro@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     CTA FINAL
+══════════════════════════════════════════════════ -->
+<section id="cta">
+  <div class="container">
+    <p class="section-eyebrow fi">Empieza hoy</p>
+    <h2 class="section-title fi">¿Listo para cobrar mejor?</h2>
+    <p class="section-sub fi">
+      Descarga CONDORNEXUS y pruébalo 15 días sin costo ni compromiso.
+    </p>
+    <div class="hero-actions fi">
+      <a href="https://github.com/johnsuperusernavarro-lab/condornexus/releases/latest/download/CONDORNEXUS.zip" class="btn-gold">⬇&nbsp; Descargar gratis</a>
+      <a href="https://wa.me/593979398860" class="btn-outline-white" target="_blank" rel="noopener">💬 Escribinos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer>
+  <p class="footer-brand"><span class="c">CONDOR</span><span class="n">NEXUS</span></p>
+  <p>Gestión inteligente de cuentas por cobrar &nbsp;·&nbsp; Hecho en Ecuador 🇪🇨</p>
+  <p style="margin-top:0.5rem;">
+    <a href="#hero">Inicio</a> &nbsp;·&nbsp;
+    <a href="#features">Características</a> &nbsp;·&nbsp;
+    <a href="#precios">Precios</a> &nbsp;·&nbsp;
+    <a href="#descarga">Descargar</a> &nbsp;·&nbsp;
+    <a href="https://wa.me/593979398860" target="_blank" rel="noopener">Contacto</a>
+  </p>
+  <p style="margin-top:1rem; font-size:0.8rem; opacity:0.45;">
+    Desarrollado por <strong style="opacity:1;">John Navarro</strong> &nbsp;·&nbsp;
+    <a href="mailto:johnsuperusernavarro@gmail.com">johnsuperusernavarro@gmail.com</a>
+  </p>
+</footer>
+
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/593979398860?text=Hola%2C%20me%20interesa%20CONDORNEXUS" class="wa-btn" title="Escribinos por WhatsApp" target="_blank" rel="noopener">💬</a>
+
+
+<!-- ══════════════════════════════════════════════════
+     JS — fade-in · counters · hamburger
+══════════════════════════════════════════════════ -->
+<script>
+  // ── Fade-in on scroll ──────────────────────────────
+  const io = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+    { threshold: 0.12 }
+  );
+  document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+  // ── Counters ───────────────────────────────────────
+  let countersRan = false;
+  const runCounters = () => {
+    if (countersRan) return;
+    countersRan = true;
+    document.querySelectorAll('[data-target]').forEach(el => {
+      const target = +el.dataset.target;
+      const suffix = el.dataset.suffix || '';
+      let cur = 0;
+      const step = Math.max(1, Math.ceil(target / 45));
+      const t = setInterval(() => {
+        cur = Math.min(cur + step, target);
+        el.textContent = cur + suffix;
+        if (cur >= target) clearInterval(t);
+      }, 30);
+    });
+  };
+  const statsObs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) { runCounters(); statsObs.disconnect(); } }),
+    { threshold: 0.25 }
+  );
+  const statsEl = document.querySelector('.stats-grid');
+  if (statsEl) statsObs.observe(statsEl);
+
+  // ── Hamburger menu ─────────────────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // ── Sticky nav shadow on scroll ────────────────────
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').style.boxShadow =
+      window.scrollY > 40 ? '0 2px 20px rgba(0,0,0,0.3)' : 'none';
+  }, { passive: true });
+</script>
+</body>
+</html>
