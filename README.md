@@ -69,8 +69,8 @@ Tus datos no salen de tu computador. Nunca.
 Escríbenos para agendar una demo de 20 minutos con tus propios datos.
 Sin compromiso. Sin presentaciones aburridas. Solo el programa funcionando.
 
-> 📩 **[Tu correo de contacto]**
-> 💬 **[Tu número de WhatsApp]**
+> 📩 **[johnsuperusernavarro@gmail.com]**
+> 💬 **[+593 979398860]**
 
 ---
 
